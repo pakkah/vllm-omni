@@ -104,8 +104,14 @@ class AsyncOmniDiffusion:
                     od_config.model_class_name = config_dict.get("_class_name", None)
                 od_config.update_multimodal_support()
 
-                tf_config_dict = get_hf_file_to_dict("transformer/config.json", od_config.model)
-                od_config.tf_model_config = TransformerConfig.from_dict(tf_config_dict)
+                if od_config.model_class_name in ("DreamIDOmniPipeline", "LingbotWorldPipeline"):
+                    # Custom pipelines such as DreamID-Omni and Lingbot-World
+                    # may expose a minimal model_index.json without a
+                    # diffusers-style transformer/ subdirectory.
+                    od_config.tf_model_config = TransformerConfig()
+                else:
+                    tf_config_dict = get_hf_file_to_dict("transformer/config.json", od_config.model)
+                    od_config.tf_model_config = TransformerConfig.from_dict(tf_config_dict)
             else:
                 raise FileNotFoundError("model_index.json not found")
         except (AttributeError, OSError, ValueError, FileNotFoundError):
