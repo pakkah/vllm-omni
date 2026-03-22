@@ -142,6 +142,11 @@ _DIFFUSION_MODELS = {
         "pipeline_dreamid_omni",
         "DreamIDOmniPipeline",
     ),
+    "LingbotWorldPipeline": (
+        "lingbot_world",
+        "pipeline_lingbot_world",
+        "LingbotWorldPipeline",
+    ),
 }
 
 
